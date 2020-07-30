@@ -50,13 +50,13 @@ def get_data():
 def get_neurons():
     neurons_file  = open("neurons", "r")
     neurons = neurons_file.read()
-    f.close()
+    neurons_file.close()
     return neurons
 
 def get_weights():
     weights_file  = open("weights", "r")
     weights = weights_file.read()
-    f.close()
+    weights_file.close()
     return weights
 
 #Neural Network Calculating Functions
@@ -95,12 +95,12 @@ def create_weights(neurons): #creates a list that holds the weights and biases a
 def createfile_neurons(neurons):
     neurons_file  = open("neurons", "w")
     neurons_file.write(neurons)
-    f.close()
+    neurons_file.close()
 
 def createfile_weights(weights):
     weights_file  = open("weights", "w")
     weights_file.write(weights)
-    f.close() 
+    weights_file.close()
 
 #Neural Network Main Functions
 def main_training(neuron_net, weight_net, learning_rate, n_steps): #Train the NN
