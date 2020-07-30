@@ -103,8 +103,60 @@ def createfile_weights(weights):
     weights_file.close()
 
 #Neural Network Main Functions
-def main_training(neuron_net, weight_net, learning_rate, n_steps): #Train the NN
+def main_training(neurons, weights, learning_rate, n_steps): #Trains the NN
     data=get_training_data()
+    costs=[]
+
+    for x in range(len(weights)): #makes the weights and biases to random numbers (between 0 and 10)
+        for y in range(len(weights[x][0])+1):
+            if y < weights[x][0]+1:
+                weights[x][0][y] = rain(0, 10)
+            else:
+                weights[x][1] = rain(0, 10)
+
+    for i in range(n_steps):
+        ri = rain(0, len(data))
+        point = data[ri][0]
+        #need something here that calcs every neuron and then ouput and then adjusts every weight / iteration
+
+    ######un-edited copied code from old, smaller NN ##start######
+        target = data[ri][1]
+        
+        z = point[0] * w1 + point[1] * w2 + b
+        pred = sigmoid(z)
+
+        cost = np.square(pred - target)
+
+        dcost_pred = 2 * (pred - target)
+        dpred_z = sigmoid_p(z)
+        
+        dz_dw1 = point[0]
+        dz_dw2 = point[1]
+        dz_db = 1
+        
+        dcost_dz = dcost_pred  * dpred_z
+        
+        dcost_dw1 =  dcost_dz * dz_dw1
+        dcost_dw2 =  dcost_dz * dz_dw2
+        dcost_db = dcost_dz * dz_db
+
+        w1 = w1 - learning_rate * dcost_dw1
+        w2 = w2 - learning_rate * dcost_dw2
+        b = b - learning_rate * dcost_db
+        
+        if i % 100 == 0:
+            cost_sum = 0
+            for j in range(len(data)):
+                point = data[ri]
+
+                z = point[0] * w1 + point[1] * w2 + b
+                pred = sigmoid(z)
+
+                target = point[2]
+                cost_sum += np.square(pred - target)
+
+            costs.append(cost_sum/len(data))
+    ######un-edited copied code from old, smaller NN ##end######
 
 def main_neural_network(): #From here the NN gets operated
     pass
