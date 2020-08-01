@@ -126,9 +126,9 @@ def main_training(neurons, weights, learning_rate, n_steps): #Trains the NN
     for x in range(len(weights)): #makes the weights and biases to random numbers (between 0 and 10)
         for y in range(len(weights[x][0])+1):
             if y < weights[x][0]+1:
-                weights[x][0][y] = rain(0, 10)
+                weights[x][0][y] = rain(-10, 10)
             else:
-                weights[x][1] = rain(0, 10)
+                weights[x][1] = rain(-10, 10)
 
     for i in range(n_steps):
         ri = rain(0, len(data))
@@ -152,6 +152,9 @@ def main_training(neurons, weights, learning_rate, n_steps): #Trains the NN
         cost=sum(temp_cost_list)
 
         #need something here that adjusts every weight
+        for c in range(len(weights)):
+            for d in range(len(weights[c][0]+1)):
+                pass
 
 def main_neural_network(): #From here the NN gets operated
     pass
