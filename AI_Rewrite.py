@@ -151,10 +151,12 @@ def main_training(neurons, weights, learning_rate, n_steps): #Trains the NN
             temp_cost_list.append((pred[b]-target[b])**2)
         cost=sum(temp_cost_list)
 
-        #need something here that adjusts every weight
         for c in range(len(weights)):
             for d in range(len(weights[c][0]+1)):
-                pass
+                if d < weights[c][0]+1: #weights
+                    pass #how to adjust the weights
+                else: #bias
+                    pass #and biases?
 
 def main_neural_network(): #From here the NN gets operated
     pass
