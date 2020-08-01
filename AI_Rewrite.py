@@ -1,6 +1,6 @@
 #Ai for eating VIRGO. REWRITE
 
-#Libarys:
+#Libaries:
 import numpy as np
 from random import randint as rain
 import os
@@ -36,7 +36,8 @@ def get_training_data():
             for y in range(len(img[x])):
                 for z in range(len(img[x][y])):
                     training_data[i][0].append(img[x][y][z])
-    return training_data
+    to_return=[training_data, path]
+    return to_return
 
 def get_data():
     data=[]
@@ -77,7 +78,7 @@ def create_neurons(layers, n_neurons): #creates a list that holds the neurons an
             neurons[i].append(0) #neurons
     return neurons
 
-def create_weights(neurons): #creates a list that holds the weights and biases and returns it; layers>neurons>weights, biases
+def create_weights(neurons): #creates a list that holds the weights and biases and returns it; layers>neurons>weight_list(>weights), biases
     weights=[]
     for i in range(len(neurons)):
         if i == 0: #obviosly no weights for the input layer lol
@@ -90,6 +91,18 @@ def create_weights(neurons): #creates a list that holds the weights and biases a
                 for z in range(len(neurons[i-1])):
                     weights[x][0].append(0) #weights
     return weights
+
+def create_targets(neurons, data):
+    target=[]
+    split=data.split("_")[1]
+    for i in range(len(neurons[-1])):
+        if split == "512":
+            target=[1, 0, 0]
+        elif split=="1024":
+            target=[0, 1, 0]
+        elif split=="2048":
+            target=[0, 0, 1]
+    return target
 
 #Neural Network create Weight and Neurons file
 def createfile_neurons(neurons):
@@ -104,8 +117,11 @@ def createfile_weights(weights):
 
 #Neural Network Main Functions
 def main_training(neurons, weights, learning_rate, n_steps): #Trains the NN
-    data=get_training_data()
+    get=get_training_data()
+    data_names=get[1]
+    data=get[0]
     costs=[]
+    layers=len(neurons)
 
     for x in range(len(weights)): #makes the weights and biases to random numbers (between 0 and 10)
         for y in range(len(weights[x][0])+1):
@@ -117,46 +133,25 @@ def main_training(neurons, weights, learning_rate, n_steps): #Trains the NN
     for i in range(n_steps):
         ri = rain(0, len(data))
         point = data[ri][0]
-        #need something here that calcs every neuron and then ouput and then adjusts every weight / iteration
 
-    ######un-edited copied code from old, smaller NN ##start######
-        target = data[ri][1]
-        
-        z = point[0] * w1 + point[1] * w2 + b
-        pred = sigmoid(z)
+        for z in range(layers): #here the neurons get calculated
+            for a in range(len(neurons[z])):
+                if z==1:
+                    pass
+                else:
+                    before_layer=neurons[z-1]
+                    weights_of_neuron=weights[z][a][0]
+                    bias_of_neuron=weights[z][a][1]
+                    neurons[z][a] = calc_neurons(weights_of_neuron, bias_of_neuron, before_layer)
 
-        cost = np.square(pred - target)
+        pred=neurons[-1]
+        target = create_targets(neurons, data_names[ri])
+        temp_cost_list=[]
+        for b in range(len(neurons[-1])): #here cost gets calculated
+            temp_cost_list.append((pred[b]-target[b])**2)
+        cost=sum(temp_cost_list)
 
-        dcost_pred = 2 * (pred - target)
-        dpred_z = sigmoid_p(z)
-        
-        dz_dw1 = point[0]
-        dz_dw2 = point[1]
-        dz_db = 1
-        
-        dcost_dz = dcost_pred  * dpred_z
-        
-        dcost_dw1 =  dcost_dz * dz_dw1
-        dcost_dw2 =  dcost_dz * dz_dw2
-        dcost_db = dcost_dz * dz_db
-
-        w1 = w1 - learning_rate * dcost_dw1
-        w2 = w2 - learning_rate * dcost_dw2
-        b = b - learning_rate * dcost_db
-        
-        if i % 100 == 0:
-            cost_sum = 0
-            for j in range(len(data)):
-                point = data[ri]
-
-                z = point[0] * w1 + point[1] * w2 + b
-                pred = sigmoid(z)
-
-                target = point[2]
-                cost_sum += np.square(pred - target)
-
-            costs.append(cost_sum/len(data))
-    ######un-edited copied code from old, smaller NN ##end######
+        #need something here that adjusts every weight
 
 def main_neural_network(): #From here the NN gets operated
     pass
