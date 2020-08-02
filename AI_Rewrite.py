@@ -120,8 +120,8 @@ def main_training(neurons, weights, learning_rate, n_steps): #Trains the NN
     get=get_training_data()
     data_names=get[1]
     data=get[0]
-    costs=[]
     layers=len(neurons)
+    costs=[]
 
     for x in range(len(weights)): #makes the weights and biases to random numbers (between 0 and 10)
         for y in range(len(weights[x][0])+1):
@@ -152,11 +152,14 @@ def main_training(neurons, weights, learning_rate, n_steps): #Trains the NN
         cost=sum(temp_cost_list)
 
         for c in range(len(weights)):
-            for d in range(len(weights[c][0]+1)):
-                if d < weights[c][0]+1: #weights
-                    pass #how to adjust the weights
-                else: #bias
-                    pass #and biases?
+            costs.append([])
+            for d in range(len(weights[c])):
+                costs[c].append([])
+                for e in range(len(weights[c][d][0])):
+                    costw=0
+                    costs[c][0].append(costw)
+                costb=0
+                cost[c].append(costb)
 
 def main_neural_network(): #From here the NN gets operated
     pass
