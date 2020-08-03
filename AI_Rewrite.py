@@ -121,7 +121,6 @@ def main_training(neurons, weights, learning_rate, n_steps): #Trains the NN
     data_names=get[1]
     data=get[0]
     layers=len(neurons)
-    costs=[]
 
     for x in range(len(weights)): #makes the weights and biases to random numbers (between 0 and 10)
         for y in range(len(weights[x][0])+1):
@@ -137,7 +136,8 @@ def main_training(neurons, weights, learning_rate, n_steps): #Trains the NN
         for z in range(layers): #here the neurons get calculated
             for a in range(len(neurons[z])):
                 if z==1:
-                    pass
+                    for f in range(len(neurons[0])):
+                        neurons[0]=point
                 else:
                     before_layer=neurons[z-1]
                     weights_of_neuron=weights[z][a][0]
@@ -152,14 +152,15 @@ def main_training(neurons, weights, learning_rate, n_steps): #Trains the NN
         cost=sum(temp_cost_list)
 
         for c in range(len(weights)):
-            costs.append([])
             for d in range(len(weights[c])):
-                costs[c].append([])
                 for e in range(len(weights[c][d][0])):
-                    costw=0
-                    costs[c][0].append(costw)
-                costb=0
-                cost[c].append(costb)
+                    sensitivityw=cost/weights[c][d][0][e]
+                    weights[c][d][0][e] -= sensitivityw * learning_rate
+                sensitivityb=cost/weights[c][d][1]
+                weights[c][d][1] -= sensitivityb * learning_rate
+
+    createfile_weights(weights)
+    return "Done"
 
 def main_neural_network(): #From here the NN gets operated
     pass
@@ -167,3 +168,14 @@ def main_neural_network(): #From here the NN gets operated
 #other
 def main(): #ui
     pass
+
+layers=4
+x=1400*3000*4
+y=x/2
+z=y/2
+n_neurons=[int(x), int(y), int(z), 3]
+neurons=create_neurons(layers, n_neurons)
+weights= create_weights(neurons)
+learning_rate=1
+n_steps=100
+main_training(neurons, weights, learning_rate, n_steps)
